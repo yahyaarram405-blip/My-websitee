@@ -247,7 +247,7 @@
             text-align: center;
             box-shadow: 0 0 20px rgba(0,210,255,0.4);
         }
-        .modal-content input, .modal-content textarea {
+        .modal-content input, .modal-content select, .modal-content textarea {
             width: 100%;
             padding: 10px;
             margin-top: 10px;
@@ -302,12 +302,13 @@
             <img src="https://i.ibb.co/cXJRHtyq/Whats-App-Image-2026-10-06-at-01-08-00.jpg" alt="Mechano Logo" class="header-logo" onclick="openImageModal(this.src)">
             <div class="header-title">
                 <h1>MP Mechanic // Catena RP</h1>
-                <p>Boss : Negan | Senior : Mercury</p>
+                <p>Boss : Negan | Owner : Mercury</p>
             </div>
         </div>
         <div class="nav-buttons">
             <button class="nav-btn active" onclick="switchPage(1, event)">🏠 Dashboard</button>
             <button class="nav-btn" onclick="switchPage(2, event)">🚗 Véhicules & Problèmes (Owner)</button>
+            <button class="nav-btn" onclick="switchPage(3, event)" style="border-color: var(--accent-orange); color: var(--accent-orange);">💰 Suivi des Rossitas</button>
             <a href="https://discord.gg/BdxYe2cwB" target="_blank" class="discord-btn">💬 Discord</a>
         </div>
     </header>
@@ -332,7 +333,7 @@
                         <li>
                             <div class="item-info">
                                 <strong>Mercury</strong>
-                                <span>Senior Mechanic</span>
+                                <span>Owner </span>
                             </div>
                             <span class="badge" style="color: var(--accent-blue);">Senior</span>
                         </li>
@@ -421,17 +422,37 @@
             </div>
         </div>
 
-    </div>
+        <!-- PAGE 3: SUIVI DES ROSSITAS (محمي بالمود باس) -->
+        <div id="page3" class="page-section">
+            <div id="passwordGate" style="max-width: 400px; margin: 4rem auto; text-align: center; background: var(--bg-card); padding: 2rem; border-radius: 12px; border: 2px solid var(--accent-orange);">
+                <h3 style="color: var(--accent-orange); margin-top: 0;">🔐 Espace Protégé (Rossitas)</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted);">Entrez le mot de passe administrateur pour accéder au suivi des reçus.</p>
+                <input type="password" id="rossitaPassword" placeholder="Mot de passe..." style="width: 100%; padding: 10px; background: #0b101d; border: 1px solid #22304d; color: white; border-radius: 6px; margin: 10px 0;">
+                <button class="action-btn" style="background-color: var(--accent-orange); width: 100%; margin-top: 10px;" onclick="checkRossitaPassword()">Valider</button>
+            </div>
 
-    <!-- Modals -->
-    <div id="playerModal" class="modal">
-        <div class="modal-content">
-            <h3 id="modalTitle">Player Name</h3>
-            <p id="modalText">Details...</p>
-            <button class="close-btn" onclick="closeModal('playerModal')">Close</button>
+            <div id="rossitaContent" style="display: none;">
+                <div class="dashboard-grid">
+                    <div class="card" style="grid-column: 1 / -1;">
+                        <h2>💰 Enregistrer une Rossita (Reçu Payé)</h2>
+                        <p style="font-size: 0.85rem; color: var(--text-muted);">Ajoutez la rossita du joueur, le montant et la date précise.</p>
+                        <button class="action-btn" onclick="openRossitaModal()">+ Ajouter Rossita</button>
+                        <div class="scrollable-list" style="margin-top: 15px;">
+                            <ul class="item-list" id="rossitaContainer">
+                                <li>
+                                    <div class="item-info"><strong>Exemple : Tonic</strong><span>Montant: 50,000$ | Date: 12 / Jeudi / 03</span></div>
+                                    <span class="badge">Payé & Validé</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
     </div>
 
+    <!-- Modals (General Form) -->
     <div id="formModal" class="modal">
         <div class="modal-content">
             <h3 id="formModalTitle">Ajouter</h3>
@@ -439,6 +460,50 @@
             <input type="text" id="inputField2" placeholder="ID / Détails / Plaka...">
             <button class="action-btn" style="margin-top: 15px; width: 100%;" onclick="submitFormData()">Submit / Envoyer sur Discord</button>
             <button class="close-btn" onclick="closeModal('formModal')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Modal Spécial Rossita (بالمبلغ + السيلكسيون ديال النهار والشهور) -->
+    <div id="rossitaModal" class="modal">
+        <div class="modal-content">
+            <h3>💰 Ajouter une Rossita</h3>
+            <input type="text" id="rossitaPlayerName" placeholder="Nom du joueur...">
+            <input type="text" id="rossitaAmount" placeholder="Montant (Ex: 50,000$)...">
+            
+            <label style="display: block; text-align: left; margin-top: 10px; font-size: 0.85rem; color: var(--text-muted);">Jour du mois :</label>
+            <select id="rossitaDayNum">
+                <option value="01">01</option><option value="02">02</option><option value="03">03</option><option value="04">04</option><option value="05">05</option><option value="06">06</option><option value="07">07</option><option value="08">08</option><option value="09">09</option><option value="10">10</option>
+                <option value="11">11</option><option value="12" selected>12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option>
+                <option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option>
+            </select>
+
+            <label style="display: block; text-align: left; margin-top: 10px; font-size: 0.85rem; color: var(--text-muted);">Jour de la semaine :</label>
+            <select id="rossitaDayWeek">
+                <option value="Lundi">Lundi</option>
+                <option value="Mardi">Mardi</option>
+                <option value="Mercredi">Mercredi</option>
+                <option value="Jeudi" selected>Jeudi</option>
+                <option value="Vendredi">Vendredi</option>
+                <option value="Samedi">Samedi</option>
+                <option value="Dimanche">Dimanche</option>
+            </select>
+
+            <label style="display: block; text-align: left; margin-top: 10px; font-size: 0.85rem; color: var(--text-muted);">Mois :</label>
+            <select id="rossitaMonth">
+                <option value="01">01 - Janvier</option><option value="02">02 - Février</option><option value="03" selected>03 - Mars</option><option value="04">04 - Avril</option><option value="05">05 - Mai</option><option value="06">06 - Juin</option>
+                <option value="07">07 - Juillet</option><option value="08">08 - Août</option><option value="09">09 - Septembre</option><option value="10">10 - Octobre</option><option value="11">11 - Novembre</option><option value="12">12 - Décembre</option>
+            </select>
+
+            <button class="action-btn" style="margin-top: 15px; width: 100%; background-color: var(--accent-orange);" onclick="submitRossitaData()">Valider & Envoyer Rossita</button>
+            <button class="close-btn" onclick="closeModal('rossitaModal')">Cancel</button>
+        </div>
+    </div>
+
+    <div id="playerModal" class="modal">
+        <div class="modal-content">
+            <h3 id="modalTitle">Player Name</h3>
+            <p id="modalText">Details...</p>
+            <button class="close-btn" onclick="closeModal('playerModal')">Close</button>
         </div>
     </div>
 
@@ -452,8 +517,24 @@
     </footer>
 
     <script>
-        // الـ Webhook ديالك مصاوب ديريكت هنا
-        const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1556845388005244959/lz_fZjTHKJgwR1ntPdBuSHJ8ylGXapPY6Kg-TywBJhE8flur21uRs3KtjcOOXo8GNCuF";
+        // الويب هوك الخاص بالمشاكل والكار بايز
+        const DISCORD_WEBHOOK_URL_GENERAL = "https://discord.com/api/webhooks/1557201027332055044/T0D4oOAPzrJa-OH9aa_Rt8pSI5SXlbTPXsCvuNfDqIrlpUTVskydm8dQzIdF3SoJaBxZ";
+        
+        // الويب هوك الثاني الخاص بالروسيطا (حط الرابط دياله هنا)
+        const DISCORD_WEBHOOK_URL_ROSSITA = "https://discord.com/api/webhooks/1557200468990492702/fHo9pBvouX3NhFYecaGAilfpb_HMtUO3mwcTBsZo-zUhB8fuJ8oaM9Hz5wsMmorTQSjz";
+
+        // المود باس الخاص بالقسم
+        const ROSSITA_SECRET_PASSWORD = "1234";
+
+        function checkRossitaPassword() {
+            const enteredPass = document.getElementById('rossitaPassword').value;
+            if(enteredPass === ROSSITA_SECRET_PASSWORD) {
+                document.getElementById('passwordGate').style.display = 'none';
+                document.getElementById('rossitaContent').style.display = 'block';
+            } else {
+                alert('Mot de passe incorrect !');
+            }
+        }
 
         const allPlayers = [
             "Tonic", "Carlos", "Tijani", "Smayka", "Fuuska", "Klaus", "Merkado", 
@@ -524,6 +605,12 @@
             document.getElementById('formModal').style.display = 'flex';
         }
 
+        function openRossitaModal() {
+            document.getElementById('rossitaPlayerName').value = '';
+            document.getElementById('rossitaAmount').value = '';
+            document.getElementById('rossitaModal').style.display = 'flex';
+        }
+
         function submitFormData() {
             const val1 = document.getElementById('inputField1').value;
             const val2 = document.getElementById('inputField2').value;
@@ -551,7 +638,6 @@
                 categoryName = '⚠ Nouveau Problème / Ticket';
             }
 
-            // Zid f la liste f s-sit
             const container = document.getElementById(targetContainerId);
             container.innerHTML += `
                 <li>
@@ -560,12 +646,11 @@
                 </li>
             `;
 
-            // Sift notification l Discord Webhook dيريكت
-            if(DISCORD_WEBHOOK_URL) {
+            if(DISCORD_WEBHOOK_URL_GENERAL) {
                 const discordMessage = {
                     content: `🔔 **${categoryName}**\n> **Détails 1:** ${val1}\n> **Détails 2:** ${val2}`
                 };
-                fetch(DISCORD_WEBHOOK_URL, {
+                fetch(DISCORD_WEBHOOK_URL_GENERAL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(discordMessage)
@@ -573,6 +658,41 @@
             }
 
             closeModal('formModal');
+        }
+
+        function submitRossitaData() {
+            const playerName = document.getElementById('rossitaPlayerName').value;
+            const amount = document.getElementById('rossitaAmount').value;
+            const dayNum = document.getElementById('rossitaDayNum').value;
+            const dayWeek = document.getElementById('rossitaDayWeek').value;
+            const month = document.getElementById('rossitaMonth').value;
+
+            if(!playerName || !amount) return alert('Kml l-ma3lomat (Ism w l-montant) 3afak!');
+
+            const dateFormatted = `${dayNum} / ${dayWeek} / ${month}`;
+
+            // زيدها فلطابلو فالسيت
+            const container = document.getElementById('rossitaContainer');
+            container.innerHTML += `
+                <li>
+                    <div class="item-info"><strong>${playerName}</strong><span>Montant: ${amount} | Date: ${dateFormatted}</span></div>
+                    <span class="badge">Payé & Validé</span>
+                </li>
+            `;
+
+            // صيفط الويب هوك الخاص بالروسيطا للشانل الثانية (بالمبلغ والتاريخ)
+            if(DISCORD_WEBHOOK_URL_ROSSITA) {
+                const discordMessage = {
+                    content: `💰 **Nouvelle Rossita Validée**\n> **Joueur:** ${playerName}\n> **Montant:** ${amount}\n> **Date:** ${dateFormatted}`
+                };
+                fetch(DISCORD_WEBHOOK_URL_ROSSITA, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(discordMessage)
+                }).catch(err => console.log('Error sending rossita to discord:', err));
+            }
+
+            closeModal('rossitaModal');
         }
     </script>
 
